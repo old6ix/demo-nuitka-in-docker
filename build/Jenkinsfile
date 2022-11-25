@@ -5,11 +5,33 @@ pipeline {
         pollSCM('H/2 0,7-23 * * *')
     }
 
+    options {
+        skipDefaultCheckout()
+    }
+
     environment {
         BUILD_OUTPUT_DIR = 'out'  // Where build result of Nuitka will be put. Must be a path in workspace.
     }
 
     stages {
+        stage('Clear workspace before build') {
+            agent {
+                docker {
+                    image 'busybox:1.35.0'
+                    args '-u root'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh 'rm -rf *'
+            }
+        }
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Compile') {
             agent {
                 docker {
@@ -64,10 +86,18 @@ pipeline {
                     ./main
                 """
             }
-            post {
-                cleanup {
-                    sh 'rm -r *'
+        }
+
+        stage('Clear workspace after build') {
+            agent {
+                docker {
+                    image 'busybox:1.35.0'
+                    args '-u root'
+                    reuseNode true
                 }
+            }
+            steps {
+                sh 'rm -r *'
             }
         }
     }
