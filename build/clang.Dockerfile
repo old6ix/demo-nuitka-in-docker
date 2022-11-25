@@ -27,6 +27,8 @@ RUN python -m nuitka \
 
 FROM ubuntu:22.10
 
+ENV LANG=C.UTF-8
+
 WORKDIR /root/
 
 COPY --from=builder /build/main.dist ./

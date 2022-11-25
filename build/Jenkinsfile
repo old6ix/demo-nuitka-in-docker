@@ -55,6 +55,9 @@ pipeline {
                     reuseNode true
                 }
             }
+            environment {
+                LANG = 'C.UTF-8' // Will raise UnicodeEncodeError when printing unicode character if not set
+            }
             steps {
                 sh """
                     cd ${BUILD_OUTPUT_DIR}/main.dist
