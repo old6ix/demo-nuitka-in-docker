@@ -1,8 +1,12 @@
 pipeline {
-    agent none
+    agent { label 'linux && docker' }
 
     triggers {
         pollSCM('H/2 0,7-23 * * *')
+    }
+
+    environment {
+        BUILD_OUTPUT_DIR = 'out'  // Where build result of Nuitka will be put. Must be a path in workspace.
     }
 
     stages {
@@ -34,29 +38,33 @@ pipeline {
                 '''
 
                 echo 'Compile'
-                sh '''
+                sh """
                     python -m nuitka \
                         --clang \
                         --standalone \
-                        --remove-output --output-dir=build \
+                        --remove-output --output-dir=${BUILD_OUTPUT_DIR} \
                         main.py
-                '''
+                """
             }
         }
+
         stage('Run') {
             agent {
                 docker {
                     image 'ubuntu:22.10'
+                    reuseNode true
                 }
             }
-            options {
-                skipDefaultCheckout()
-            }
             steps {
-                sh '''
-                    cd ./build/main.dist
+                sh """
+                    cd ${BUILD_OUTPUT_DIR}/main.dist
                     ./main
-                '''
+                """
+            }
+            post {
+                cleanup {
+                    sh 'rm -r *'
+                }
             }
         }
     }
