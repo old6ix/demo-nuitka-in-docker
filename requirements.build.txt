@@ -1,0 +1,3 @@
+-r requirements.txt
+
+nuitka==1.2.2
