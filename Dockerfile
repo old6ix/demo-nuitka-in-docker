@@ -12,7 +12,6 @@ COPY . .
 
 # Install pip requirements
 RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple \
-    && python -m pip install --upgrade pip \
     && pip install -r requirements.build.txt
 
 # Compile with nuitka
