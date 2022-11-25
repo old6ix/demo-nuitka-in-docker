@@ -1,0 +1,63 @@
+pipeline {
+    agent none
+
+    triggers {
+        pollSCM('H/2 0,7-23 * * *')
+    }
+
+    stages {
+        stage('Compile') {
+            agent {
+                docker {
+                    image 'python:3.9.15-slim-bullseye'
+                    args '''
+                        -u root
+                        -v $HOME/.cache/pip/wheels:/root/.cache/pip/wheels
+                    '''
+                    reuseNode true
+                }
+            }
+            steps {
+                echo 'Install dependencies'
+                sh '''
+                    sed -i s/deb.debian.org/mirrors.ustc.edu.cn/g /etc/apt/sources.list
+                    apt-get update
+                    apt-get install --no-install-recommends -y \
+                        build-essential \
+                        patchelf \
+                        ccache \
+                        clang
+                '''
+                sh '''
+                    pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+                    pip install -r requirements.build.txt
+                '''
+
+                echo 'Compile'
+                sh '''
+                    python -m nuitka \
+                        --clang \
+                        --standalone \
+                        --remove-output --output-dir=build \
+                        main.py
+                '''
+            }
+        }
+        stage('Run') {
+            agent {
+                docker {
+                    image 'ubuntu:22.10'
+                }
+            }
+            options {
+                skipDefaultCheckout()
+            }
+            steps {
+                sh '''
+                    cd ./build/main.dist
+                    ./main
+                '''
+            }
+        }
+    }
+}
