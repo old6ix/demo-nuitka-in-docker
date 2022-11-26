@@ -16,11 +16,7 @@ pipeline {
     stages {
         stage('Clear workspace before build') {
             agent {
-                docker {
-                    image 'busybox:1.35.0'
-                    args '-u root'
-                    reuseNode true
-                }
+                docker { image 'busybox:1.35.0'; args '-u root'; reuseNode true }
             }
             steps {
                 sh 'rm -rf *'
@@ -90,11 +86,7 @@ pipeline {
 
         stage('Clear workspace after build') {
             agent {
-                docker {
-                    image 'busybox:1.35.0'
-                    args '-u root'
-                    reuseNode true
-                }
+                docker { image 'busybox:1.35.0'; args '-u root'; reuseNode true }
             }
             steps {
                 sh 'rm -r *'
