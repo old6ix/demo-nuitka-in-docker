@@ -68,6 +68,8 @@ pipeline {
                         --clang \
                         --standalone \
                         --remove-output --output-dir=${BUILD_OUTPUT_DIR} \
+                        --warn-implicit-exceptions --warn-unusual-code --assume-yes-for-downloads \
+                        --no-progressbar \
                         main.py
                 """
             }

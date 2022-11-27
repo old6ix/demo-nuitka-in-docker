@@ -22,6 +22,7 @@ RUN python -m nuitka \
     --clang \
     --standalone \
     --remove-output --output-dir=/build \
+    --warn-implicit-exceptions --warn-unusual-code --assume-yes-for-downloads \
     main.py
 
 
