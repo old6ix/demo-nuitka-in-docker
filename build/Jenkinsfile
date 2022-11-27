@@ -10,7 +10,13 @@ pipeline {
     }
 
     environment {
-        BUILD_OUTPUT_DIR = 'out'  // Where build result of Nuitka will be put. Must be a path in workspace.
+        BUILD_OUTPUT_DIR = "out"  // Where build result of Nuitka will be put. Must be a path in workspace.
+
+        /*
+         * The storage for cache results of all kinds from C and Nuitka.
+         * Ref: https://github.com/Nuitka/Nuitka#control-where-caches-live
+         */
+        NUITKA_CACHE_DIR = "$HOME/.cache/nuitka/$JOB_NAME"
     }
 
     stages {
@@ -35,6 +41,7 @@ pipeline {
                     args '''
                         -u root
                         -v $HOME/.cache/pip/wheels:/root/.cache/pip/wheels
+                        -v $NUITKA_CACHE_DIR:$NUITKA_CACHE_DIR
                     '''
                     reuseNode true
                 }
