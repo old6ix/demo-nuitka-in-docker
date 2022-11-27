@@ -3,7 +3,7 @@ FROM python:3.9.15-bullseye AS builder
 WORKDIR /app/
 
 # Install needed softwares for nuitka
-RUN sed -i s/deb.debian.org/mirrors.ustc.edu.cn/g /etc/apt/sources.list \
+RUN sed -i s/deb.debian.org/mirrors.huaweicloud.com/g /etc/apt/sources.list \
     && apt-get update -y \
     && apt-get install --no-install-recommends -y \
         patchelf \
