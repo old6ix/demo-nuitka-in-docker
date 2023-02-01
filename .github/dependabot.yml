@@ -3,12 +3,14 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    ignore:
+      - dependency-name: "requests"
 
   - package-ecosystem: "docker"
     directory: "/build"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     ignore:
       - dependency-name: "python"
         update-types: ["version-update:semver-minor"]
