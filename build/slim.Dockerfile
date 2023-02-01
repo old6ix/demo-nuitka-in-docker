@@ -35,4 +35,4 @@ WORKDIR /root/
 
 COPY --from=builder /build/main.dist ./
 
-CMD ["./main"]
+CMD ["./main.bin"]
