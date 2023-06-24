@@ -78,7 +78,7 @@ pipeline {
         stage('Run') {
             agent {
                 docker {
-                    image 'ubuntu:22.10'
+                    image 'ubuntu:22.04'
                     reuseNode true
                 }
             }
