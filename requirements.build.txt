@@ -1,6 +1,6 @@
 -r requirements.txt
 
-nuitka==1.6.4
+nuitka==1.8.3
 
 # Nuitka:WARNING: Using very slow fallback for ordered sets,
 # please install 'orderedset' PyPI package for best Python compile time performance.
